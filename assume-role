@@ -87,7 +87,7 @@ assume-role(){
 
   # load default assume-role profile if available, use "default" otherwise
   if [ "$AWS_PROFILE_ASSUME_ROLE" ]; then
-    echo "Using assume-role default profile: $AWS_PROFILE_ASSUME_ROLE"
+    echo_out "Using assume-role default profile: $AWS_PROFILE_ASSUME_ROLE"
     default_profile=${AWS_PROFILE_ASSUME_ROLE}
   else
     default_profile="default"
@@ -100,7 +100,7 @@ assume-role(){
 
   # set account_name
   if [ -z "$account_name_input" ] && [ -z "$OUTPUT_TO_EVAL" ]; then
-    echo -n "Assume Into Account [default]:"
+    echo_out -n "Assume Into Account [default]:"
     read -r account_name
     # default
     account_name=${account_name:-"default"}
@@ -126,7 +126,7 @@ assume-role(){
 
   # set role
   if [ -z "$role_input" ] && [ -z "$OUTPUT_TO_EVAL" ]; then
-    echo -n "Assume Into Role [read]: "
+    echo_out -n "Assume Into Role [read]: "
     read -r role
     role=${role:-"read"}
   else
@@ -141,7 +141,7 @@ assume-role(){
   # set region
   AWS_CONFIG_REGION="$(aws configure get region --profile ${default_profile})"
   if [ -z "$aws_region_input" ] && [ -z "$AWS_REGION" ] && [ -z "$AWS_DEFAULT_REGION" ] && [ -z "$AWS_CONFIG_REGION" ] && [ -z "$OUTPUT_TO_EVAL" ]; then
-    echo -n "Assume Into Region [us-east-1]: "
+    echo_out -n "Assume Into Region [us-east-1]: "
     read -r region
     region=${region:-"us-east-1"}
   elif [ ! -z "$aws_region_input" ]; then
@@ -178,7 +178,7 @@ assume-role(){
   if [ "$ABOUT_SESSION_TIMEOUT" -lt "$SESSION_TIMEOUT_DELTA" ]; then
     # We'll need a token to renew session
     if [ -z "$mfa_token_input" ] && [ -z "$OUTPUT_TO_EVAL" ]; then
-      echo -n "MFA Token: "
+      echo_out -n "MFA Token: "
       read -r -s mfa_token
     else
       mfa_token="$mfa_token_input"
@@ -302,7 +302,7 @@ if [[ "${BASH_SOURCE[0]}" != "${0}" ]]; then
 elif [[ "init" == "${1}" ]]; then
   # TODO: This will be multi-shell support like rbenv, e.g. fish
   # Supports `eval "$(assume-role init -)"` in rc file
-  echo "Currently not supported"
+  echo_out "Currently not supported"
 else
   # The script is being called directly
   # Supports calling being called like eval $(assume-role account role [token])
